@@ -29,7 +29,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 		try {
-			if (existeJWTToken(request, response)) {
+			if (checkJWTToken(request, response)) {
 				Claims claims = validateToken(request);
 				if (claims.get("authorities") != null) {
 					setUpSpringAuthentication(claims);
@@ -51,7 +51,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 	}
 
 	/**
-	 * Metodo para autenticarnos dentro del flujo de Spring
+	 * Authentication method in Spring flow
 	 * 
 	 * @param claims
 	 */
@@ -65,7 +65,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
 	}
 
-	private boolean existeJWTToken(HttpServletRequest request, HttpServletResponse res) {
+	private boolean checkJWTToken(HttpServletRequest request, HttpServletResponse res) {
 		String authenticationHeader = request.getHeader(HEADER);
 		if (authenticationHeader == null || !authenticationHeader.startsWith(PREFIX))
 			return false;
